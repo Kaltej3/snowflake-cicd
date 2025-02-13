@@ -6,37 +6,32 @@ on:
       - dev
       - qa
       - prod
-      
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-  
+  workflow_dispatch: # Allows manual trigger
+
 jobs:
-  # This workflow contains a single job called "deploy"
   deploy:
     runs-on: ubuntu-latest
 
     env:
-      SNOWSQL_PWD: ${{ secrets.SNOWFLAKE_PASSWORD }}
-      SNOWSQL_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-      SNOWSQL_USER: ${{ secrets.SNOWFLAKE_USERNAME }}
-      SNOWSQL_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
-      SNOWSQL_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
-      SNOWSQL_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
-      SNOWSQL_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+      SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+      SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+      SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+      SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+      SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
+      SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+      SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Install SnowSQL
         run: |
-          curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
-          SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
-      - name: Upload artifact to SnowSQL
-        run: |
-          ~/bin/snowsql -q 'put file://'$(pwd)'/storedproc.py @~/${{ github.ref_name }} overwrite=true' -o friendly=false
-      - name: Create or update Stored PRocedure
+          curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/latest/linux_x86_64/snowsql-linux_x86_64
+          chmod +x snowsql-linux_x86_64
+          sudo ./snowsql-linux_x86_64 --silent
+
+      - name: Run Test Query in Snowflake
         run: |
           ~/bin/snowsql -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -p $SNOWFLAKE_PASSWORD \
                         -d $SNOWFLAKE_DATABASE -s $SNOWFLAKE_SCHEMA -r $SNOWFLAKE_ROLE \
