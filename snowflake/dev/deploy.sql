@@ -14,3 +14,5 @@ INSERT INTO users (name, email) VALUES
 ('Bob', 'bob@example.com');
 
 select current_date();
+
+select current_date();
