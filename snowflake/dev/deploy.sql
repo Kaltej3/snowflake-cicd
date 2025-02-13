@@ -12,3 +12,5 @@ CREATE OR REPLACE TABLE users (
 INSERT INTO users (name, email) VALUES 
 ('Alice', 'alice@example.com'),
 ('Bob', 'bob@example.com');
+
+select current_date();
