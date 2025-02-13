@@ -40,4 +40,4 @@ jobs:
         run: |
           ~/bin/snowsql -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -p $SNOWFLAKE_PASSWORD \
                         -d $SNOWFLAKE_DATABASE -s $SNOWFLAKE_SCHEMA -r $SNOWFLAKE_ROLE \
-                        -w $SNOWFLAKE_WAREHOUSE -f snowflake/${{ github.ref_name }}/deploy.sql
+                        -w $SNOWFLAKE_WAREHOUSE -q "SELECT CURRENT_TIMESTAMP();"
