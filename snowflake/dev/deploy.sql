@@ -1,4 +1,4 @@
-USE DATABASE QA_DB;
+USE DATABASE DEV_DB;
 USE SCHEMA PUBLIC;
 
 -- Create a sample table
