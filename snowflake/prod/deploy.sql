@@ -1,4 +1,4 @@
-USE DATABASE QA_DB;
+USE DATABASE PROD_DB;
 USE SCHEMA PUBLIC;
 
 -- Create a sample table
@@ -10,5 +10,5 @@ CREATE OR REPLACE TABLE users (
 
 -- Insert sample data
 INSERT INTO users (name, email) VALUES 
-('Charlie', 'charlie@example.com'),
-('David', 'david@example.com');
+('Eve', 'eve@example.com'),
+('Frank', 'frank@example.com');
